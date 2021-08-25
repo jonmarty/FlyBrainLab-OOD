@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+setup_env () {
+  export FFBOIMAGE="/mnt/nvme/node04/${USER}/fruitflybrain+fbl+latest"
+  export JUPYTER_CONFIG_PATH="/home/ffbo/.ffbo/config/config.py"
+  export FFBO_CONFIG_PATH="/home/ffbo/.ffbo/config/config.ini"
+  export NEUROMYNERVA_CONFIG_PATH="/home/ffbo/.jupyter/lab/user-settings/@flybrainlab/neuromynerva/plugin.jupyterlab-settings"
+  export ORIENTDB_CONFIG_PATH="/home/ffbo/orientdb/config/orientdb-server-config.xml"
+}
+setup_env
+
+singularity run -C -w -f --nv \
+                -B "${HOME}:/userdir" \
+                -B "${JUPYTER_CONFIG}:${JUPYTER_CONFIG_PATH}" \
+                -B "${FFBO_CONFIG}:${FFBO_CONFIG_PATH}" \
+                -B "${NEUROMYNERVA_CONFIG}:${NEUROMYNERVA_CONFIG_PATH}" \
+                -B "${ORIENTDB_CONFIG}:${ORIENTDB_CONFIG_PATH}" \
+                $FFBOIMAGE

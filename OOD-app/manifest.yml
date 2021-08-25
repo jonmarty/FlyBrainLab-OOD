@@ -1,0 +1,7 @@
+---
+name: FlyBrainLab
+category: Interactive Apps
+subcategory: Servers
+role: batch_connect
+description: |
+  This app will launch the FBL suite of servers, as well as a Jupyter Lab instance that the user can access

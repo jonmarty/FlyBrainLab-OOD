@@ -1,0 +1,48 @@
+# Export the module function if it exists
+[[ $(type -t module) == "function" ]] && export -f module
+
+# Find available port to run server on
+port=$(find_port ${host})
+ffbo_port=$(find_port ${host})
+orientdb_binary_port=$(find_port ${host})
+orientdb_html_port=$(find_port ${host})
+
+# Generate SHA1 encrypted password (requires OpenSSL installed)
+SALT=$(create_passwd 16)
+password=$(create_passwd 16)
+PASSWORD_SHA1=$(echo -n "${password}${SALT}" | openssl dgst -sha1 | awk '{print $NF}')
+
+# The '$CONFIG_FILE' environment variable is exported as it is used in the main
+# 'script.sh.erb' file when launching the Jupyter Notebook server.
+export JUPYTER_CONFIG="${PWD}/config.py"
+
+# Generate Jupyter configuration file with secure file permissions
+(
+umask 077
+cat > "${JUPYTER_CONFIG}" << EOL
+c.NotebookApp.ip = '*'
+c.NotebookApp.port = $port
+c.NotebookApp.port_retries = 0
+c.NotebookApp.password = u'sha1:${SALT}:${PASSWORD_SHA1}'
+c.NotebookApp.base_url = '/node/${host}/${port}'
+c.NotebookApp.open_browser = False
+c.NotebookApp.allow_origin = '*'
+c.NotebookApp.notebook_dir = '${HOME}'
+c.NotebookApp.disable_check_xsrf = True
+c.NotebookApp.iopub_data_rate_limit = 100000
+EOL
+)
+
+export FFBO_CONFIG="${PWD}/config.ini"
+
+# Replace the FFBO port with the generated port
+sed -i 's/{FFBO-PORT}/'"${ffbo_port}"'/g' $FFBO_CONFIG
+
+export NEUROMYNERVA_CONFIG="${PWD}/plugin.jupyterlab-settings"
+
+sed -i 's/{FFBO-PORT}/'"${ffbo_port}"'/g' $NEUROMYNERVA_CONFIG
+
+export ORIENTDB_CONFIG="${PWD}/orientdb-server-config.xml"
+
+sed -i 's/{ORIENTDB-BINARY-PORT}/'"${orientdb_binary_port}"'/g' $ORIENTDB_CONFIG
+sed -i 's/{ORIENTDB-HTML-PORT}/'"${orientdb_html_port}"'/g' $ORIENTDB_CONFIG

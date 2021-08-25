@@ -1,0 +1,8 @@
+---
+batch_connect:
+  template: "basic"
+script:
+  native:
+    - "--gpus=<%= bc_num_gpus.blank? ? 1 : bc_num_gpus.to_i %>"
+    - "--cpus-per-gpu=4"
+    - "--mem-per-gpu=10G"
