@@ -103,7 +103,23 @@ This should take around 15-30 minutes. That's the full setup process.
 
 ### Setting up nodes on Amazon AWS
 
-TODO
+In order to set up FBL-OOD on AWS you will need to create `setup`, `login`, and `gpu` nodes. 
+
+#### Setup Node
+
+For the setup node, any node type will work, so I'd advise going with a free-tier option.
+
+#### Login Node
+
+For the login node, make sure there is at least 32 GB of space on the instance. Additionally, make sure it can be accessed on any web ports you're interested in, on top of port 22 for SSH. The most generic options would be 80 if you're not using SSL and 443 if you are.
+
+#### GPU Node
+
+For the gpu node, make sure there is at least 128 GB of space on the instance. Also, choose a node type which has access to at least 1 GPU.
+
+When you launch your AWS instances, you will see that an IP is assigned to them. This IP is different with each launch, which messes with the setup. As such, you will need to assign a more permanent IP to these nodes. If you have access to your own pool of IPs, you can look on AWS for how to use these. Otherwise, you can allocate one of Amazon's Public IPs using as an Elastic IP. See [] for further details.
+
+Finally, this whole setup process can be rather buggy, and sometimes your `login` or `gpu` nodes will stop working properly. However, because the setup of these nodes is fully determined by your `setup` node's configuration, you can erase them and start over. To do this, select your node in the EC2 instances screen, click `Actions -> Monitor and Troubleshoot -> Replace root volume`.
 
 ### Setting up nodes on physical servers
 
