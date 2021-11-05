@@ -2,9 +2,7 @@
 
 ## Introduction
 
-FlyBrainLab is a multi-component tool for neuroanatomic exploration and model simulation. It offers [...].
-
-However, FBL is a relatively heavy application, with several gigabytes of files needing to be installed. FBL-OOD solves this issue by moving the burden of storage off of personal computers and onto organization-wide servers. It orchestrates a centralized architecture that consists of "login" nodes and "gpu" nodes.
+FlyBrainLab provides an environment where computational researchers can present configurable, executable neural circuits, and experimental scientists can interactively explore circuit structure and function ultimately leading to biological validation. However, FBL is a relatively heavy application, with several gigabytes of files needing to be installed. FBL-OOD solves this issue by moving the burden of storage off of personal computers and onto organization-wide servers. It orchestrates a centralized architecture that consists of "login" nodes and "gpu" nodes.
 
 Given it's formulation, FBL-OOD is suitable for organizations with access to servers.
 
@@ -75,8 +73,42 @@ ood_ssl_certificate: CERTIFICATE-FILE
 ood_ssl_certificate_key: CERTIFICATE-KEY-FILE
 ```
 
-If you would like to use CAS, TODO
+If you would like to use CAS to handle logins, please set the following option in `config/group_vars/slurm-cluster.yml`
+
+```console
+ood_use_cas: yes
+```
+
+Next, you will need to set TODO
 
 ### Run DeepOps
 
-Now, we will apply our configuration over 
+Navigate to the root of the `deepops-fbl-ood` directory.
+
+First, run the following command to make sure all our nodes are accounted for (we can access them)
+
+```console
+ansible all -m raw -a "hostname"
+```
+
+Next, we apply our configuration
+
+```console
+ansible-playbook -l slurm-cluster playbooks/slurm-cluster.yml
+```
+
+This should take around 15-30 minutes. That's the full setup process.
+
+## Appendix
+
+### Setting up nodes on Amazon AWS
+
+TODO
+
+### Setting up nodes on physical servers
+
+TODO
+
+### Adding and Removing Users
+
+TODO
