@@ -45,7 +45,7 @@ replacing `IP` with the IPv4 address of the GPU node and `NUM` with a different 
 
 Now, put the name of your login node in the line under `[slurm-master]` and, in seperate lines, put the names of your gpu nodes under `[slurm-node]`.
 
-Now, make sure all of your nodes (login and gpu) have a common ssh private key file that can be used to access them. (for amazon, see TODO, for a private setup, see TODO) As well as a common username (which corresponds to a user with sudo privileges).
+Now, make sure all of your nodes (login and gpu) have a common ssh private key file that can be used to access them. (for amazon, see "Setting up nodes on Amazon AWS" in the Appendix, for a private setup, see "Setting up nodes on physical servers" in the Appendix) As well as a common username (which corresponds to a user with sudo privileges).
 
 Now, under `[all:vars]`, specify
 
@@ -127,4 +127,20 @@ TODO
 
 ### Adding and Removing Users
 
-TODO
+In order to add or remove users, I have provided a set of utility playbooks under playbooks/fbl-ood. In order to add an fbl user, run
+
+```console
+ansible-playbook playbooks/fbl-ood/add-fbl-user --extra-vars="user=USER password=PASSWORD new_user=yes/no"
+```
+
+To remove an fbl user
+
+```console
+ansible-playbook playbooks/fbl-ood/rm-fbl-user --extra-vars="user=USER"
+```
+
+To list existing fbl users
+
+```console
+ansible-playbook playbooks/fbl-ood/list-fbl-users
+```
